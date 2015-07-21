@@ -1,0 +1,268 @@
+<!--
+Tumblindex theme (tumblindex.com)
+by Jon Gacnik (jongacnik.com)
+original: April 19, 2012
+-->
+
+<!DOCTYPE html>
+<html>
+
+    <head>
+		<title>{Title}</title>
+		<meta name="viewport" content="width=1200">
+		<link rel="shortcut icon" href="{Favicon}">
+        <link rel="alternate" type="application/rss+xml" href="{RSS}">
+        {block:Description}
+            <meta name="description" content="{MetaDescription}" />
+        {/block:Description}
+
+		<!-- DEFAULT TEXT -->
+        <meta name="text:Position Title" content="theme"/>
+        <meta name="text:Contact Email" content="hello@tumblindex.com"/>
+        <meta name="text:Project List Title" content="Projects"/>
+        <meta name="text:Page List Title" content="Pages"/>
+        <meta name="text:Font Size" content="16"/>
+
+        <!-- DEFAULT IMAGE -->
+        <meta name="image:Home Image" content=""/>
+
+        <!-- DEFAULT FONTS -->
+        <meta name="font:Font" content="Times New Roman"/>
+
+        <!-- BOOLEANS -->
+        <meta name="if:Show Project Name" content="1"/>
+        <meta name="if:Hide Email Everywhere" content="0"/>
+        <meta name="if:Hide Email on Project Pages" content="1"/>
+        <meta name="if:Stick Left Column" content="1"/>
+        <meta name="if:Increase Letter Spacing" content="0"/>
+
+        <!-- DEFAULT COLORS -->
+        <meta name="color:Background" content="#FFFFFF"/>
+        <meta name="color:Font Color" content="#000000"/>
+        <meta name="color:Link Color" content="#0000FF"/>
+        <meta name="color:Link Hover Color" content="#0000FF"/>
+        <meta name="color:Heading Color" content="#000000"/>
+        <meta name="color:Tag Color" content="#999999"/>
+
+
+		<!-- STYLES -->
+		<link rel="stylesheet" href="style.css">
+		<style type="text/css">
+	        body {font-size: {text:Font Size}px; font-family: {font:Font}; background-color: {color:Background}; color: {color:Font Color};}
+	        a { color: {color:Link Color}; text-decoration: none; }
+	        a:hover { color: {color:Link Hover Color}; text-decoration: underline; }
+	        h3 { color: {color:Heading Color}; }
+	        .tags li:before, .tags a, #tagged { color: {color:Tag Color}; }
+			{block:IfNotShowProjectName}h4 { display: none; }{/block:IfNotShowProjectName}
+	        {block:IfIncreaseLetterSpacing}#wrapper { letter-spacing: 1px; }{/block:IfIncreaseLetterSpacing}
+	        {block:IfStickLeftColumn}#left { position: fixed; } #right { margin-left: 260px; }{/block:IfStickLeftColumn}
+
+	        {CustomCSS}
+        </style>
+
+
+		<!-- JAVASCRIPT -->
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+    <script type="text/javascript" src="jquery.fitvids.js"></script>
+		<script type="text/javascript" src="tumblindex.js"></script>
+
+
+	</head>
+
+	<body>
+		<div id="wrapper">
+
+			<!-- ////////////////// LEFT COLUMN ////////////////// -->
+			<div id="left">
+				<div id="title">
+					<h2><a href="/">{Title}</a></h2>{block:IfPositionTitle}&nbsp;/&nbsp;{text:Position Title}{/block:IfPositionTitle}
+				</div>
+				<div id="projects">
+					{block:IfProjectListTitle}
+						<h3>{text:Project List Title}</h3>
+					{/block:IfProjectListTitle}
+					<ul id="project-list"></ul>
+					{block:HasPages}
+					{block:IfPageListTitle}
+						<h3>{text:Page List Title}</h3>
+					{/block:IfPageListTitle}
+					<ul id="pages">
+						{block:Pages}
+						<li><a href="{URL}">{Label}</a></li>
+						{/block:Pages}
+					</ul>
+					{/block:HasPages}
+					<div id="dump"></div>
+				</div>
+				<div id="credit"><a href="http://tumblindex.com">Tumblindex theme</a></div>
+			</div>
+
+
+			<!-- ////////////////// RIGHT COLUMN ////////////////// -->
+			<div id="right">
+
+				{block:IfNotHideEmailEverywhere}
+				<div id="email">
+					{block:IfContactEmail}<a href="mailto:{text:Contact Email}">{text:Contact Email}</a>{/block:IfContactEmail}
+				</div>
+				{/block:IfNotHideEmailEverywhere}
+
+				{block:TagPage}
+		            <div id="tagged">tagged #{Tag}</div>
+		            <hr>
+		        {/block:TagPage}
+
+				<!-- BEGIN POSTS -->
+				<ul id="posts">
+				{block:Posts}
+
+					<!-- TEXT -->
+					{block:Text}
+					<li class="post text">
+						{block:Tags}<h4>{Tag}</h4>{/block:Tags}
+
+						{Body}
+
+						{block:HasTags}
+                        <ul class="tags">
+                        	{block:Tags}
+                        	<li><a href="{TagURL}">{Tag}</a></li>
+                        	{/block:Tags}
+                        </ul>
+                        {/block:HasTags}
+
+					</li>
+					{/block:Text}
+
+					<!-- PHOTO -->
+					{block:Photo}
+                    <li class="post photo">
+                    	{block:Tags}<h4>{Tag}</h4>{/block:Tags}
+
+                    	{block:Caption}
+                            <div class="caption">{Caption}</div>
+                        {/block:Caption}
+
+                        <img src="{PhotoURL-HighRes}" alt="{Caption}"/>
+
+	                    {block:HasTags}
+                        <ul class="tags">
+                        	{block:Tags}
+                        	<li><a href="{TagURL}">{Tag}</a></li>
+                        	{/block:Tags}
+                        </ul>
+                        {/block:HasTags}
+
+                    </li>
+                	{/block:Photo}
+
+                	<!-- PHOTOSET -->
+                	{block:Photoset}
+                    <li class="post photoset">
+                    	{block:Tags}<h4>{Tag}</h4>{/block:Tags}
+
+                    	{block:Caption}
+                    		<div class="caption">{Caption}</div>
+                    	{/block:Caption}
+
+                    	<ul class="set">
+					    {block:Photos}
+					 		<li>
+					    	<img src="{PhotoURL-HighRes}" alt="{Caption}"/>
+					    	{block:Caption}
+					        	<div class="caption">{Caption}</div>
+					        {/block:Caption}
+					        </li>
+					    {/block:Photos}
+					    </ul>
+
+					    {block:HasTags}
+                        <ul class="tags">
+                        	{block:Tags}
+                        	<li><a href="{TagURL}">{Tag}</a></li>
+                        	{/block:Tags}
+                        </ul>
+                        {/block:HasTags}
+
+                    </li>
+                	{/block:Photoset}
+
+
+                	<!-- VIDEO -->
+                	{block:Video}
+                    <li class="post video">
+                    	{block:Tags}<h4>{Tag}</h4>{/block:Tags}
+
+                    	{block:Caption}
+                            <div class="caption">{Caption}</div>
+                        {/block:Caption}
+
+                        {Video-500}
+
+                        {block:HasTags}
+                        <ul class="tags">
+                        	{block:Tags}
+                        	<li><a href="{TagURL}">{Tag}</a></li>
+                        	{/block:Tags}
+                        </ul>
+                        {/block:HasTags}
+
+                    </li>
+                	{/block:Video}
+
+
+                	<!-- AUDIO -->
+                	{block:Audio}
+                    <li class="post audio">
+                    	{block:Tags}<h4>{Tag}</h4>{/block:Tags}
+
+                    	{block:Caption}
+                            <div class="caption">{Caption}</div>
+                        {/block:Caption}
+
+                        {AudioPlayerBlack}
+
+						{block:HasTags}
+                        <ul class="tags">
+                        	{block:Tags}
+                        	<li><a href="{TagURL}">{Tag}</a></li>
+                        	{/block:Tags}
+                        </ul>
+                        {/block:HasTags}
+
+                    </li>
+                	{/block:Audio}
+
+                	{block:Chat}{/block:Chat}
+                	{block:Link}{/block:Link}
+                	{block:Quote}{/block:Quote}
+
+                {/block:Posts}
+				</ul>
+				<!-- END POSTS -->
+
+				<!-- BEGIN HOME CONTENT -->
+				<div id="description">
+					<div id="desc">{Description}</div>
+					{block:IfHomeImageImage}
+						<img src="{image:Home Image}"/>
+					{/block:IfHomeImageImage}
+				</div>
+
+			</div>
+
+
+			<!-- ////////////////// RIGHT COLUMN ////////////////// -->
+
+
+		</div>
+	</body>
+	{block:IfHideEmailOnProjectPages}
+	<script>
+	var loc = document.URL;
+    var root = document.location.hostname;
+	if(loc != 'http://'+root+'/')
+		$('#email').remove();
+	</script>
+	{/block:IfHideEmailOnProjectPages}
+</html>
