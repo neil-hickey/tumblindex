@@ -100,7 +100,7 @@ $(document).ready(function(){
 	if (root != 'www.tumblr.com') {
 		var posts = tumblr_api_read.posts;
 		for (var i in posts) {
-			$('#project-list').append('<li><a href='+posts[i].url+'>'+posts[i].tags[0]+'</a></li>');
+			$('#project-list').append('<li><a href='+posts[i].url-with-slug+'>'+posts[i].tags[0]+'</a></li>');
 		}
 	} else {
 		$('#project-list').append('<li><a href="#">project title</a></li>')
